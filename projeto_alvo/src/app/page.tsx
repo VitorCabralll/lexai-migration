@@ -1,34 +1,38 @@
 "use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/use-auth';
-import { Skeleton } from '@/components/ui/skeleton'; // For loading state
+import { useEffect } from "react";
+import { useRouter } from "next/navigation"; // Changed from react-router-dom
+import { useAuth } from "@/hooks/useAuth"; // Assuming path is correct
 
-export default function HomePage() {
+const IndexPage = () => { // Renamed component
+  const router = useRouter(); // Changed from useNavigate
   const { user, loading } = useAuth();
-  const router = useRouter();
 
   useEffect(() => {
     if (!loading) {
       if (user) {
-        router.replace('/dashboard');
+        router.push("/dashboard"); // Changed to router.push
       } else {
-        router.replace('/login');
+        router.push("/login"); // Changed to router.push
       }
     }
   }, [user, loading, router]);
 
-  return (
-    <div className="flex h-screen w-screen items-center justify-center bg-background">
-      <div className="flex flex-col items-center space-y-4">
-        <svg className="animate-spin h-12 w-12 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <p className="text-lg text-foreground font-medium">Loading LexAI...</p>
-        <Skeleton className="h-4 w-48" />
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <span className="text-white font-bold text-2xl">L</span>
+          </div>
+          <h1 className="text-4xl font-bold mb-4">LexAI</h1>
+          <p className="text-xl text-muted-foreground">Carregando...</p>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+
+  return null; // Or a more suitable loading/empty state for Next.js page
+};
+
+export default IndexPage;

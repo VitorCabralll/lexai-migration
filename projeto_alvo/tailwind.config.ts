@@ -3,18 +3,25 @@ import type {Config} from 'tailwindcss';
 export default {
   darkMode: ['class'],
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',      // Updated to include app first
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',    // Kept for any remaining pages
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    container: { // Added from projeto_fonte
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px'
+      }
+    },
     extend: {
-      fontFamily: {
+      fontFamily: { // Kept from projeto_alvo
         body: ['Inter', 'sans-serif'],
         headline: ['Space Grotesk', 'sans-serif'],
         code: ['monospace'],
       },
-      colors: {
+      colors: { // Kept from projeto_alvo (relies on CSS variables from globals.css)
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -55,7 +62,7 @@ export default {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
-        sidebar: {
+        sidebar: { // These definitions match those in globals.css from projeto_fonte
           DEFAULT: 'hsl(var(--sidebar-background))',
           foreground: 'hsl(var(--sidebar-foreground))',
           primary: 'hsl(var(--sidebar-primary))',
@@ -66,12 +73,12 @@ export default {
           ring: 'hsl(var(--sidebar-ring))',
         },
       },
-      borderRadius: {
+      borderRadius: { // Kept (identical in both)
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
-      keyframes: {
+      keyframes: { // Kept (identical in both)
         'accordion-down': {
           from: {
             height: '0',
@@ -89,11 +96,11 @@ export default {
           },
         },
       },
-      animation: {
+      animation: { // Kept (identical in both)
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate')], // Kept (identical in both)
 } satisfies Config;
