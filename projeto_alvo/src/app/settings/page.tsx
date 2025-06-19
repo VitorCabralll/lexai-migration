@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -8,38 +8,21 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Plus, Settings as SettingsIcon, User, Shield, ArrowLeft } from "lucide-react";
-import Link from "next/link"; // Changed from react-router-dom
-import { useWorkspace } from "@/contexts/WorkspaceContext"; // Assuming path is correct
-import { useTheme } from "next-themes"; // For dark mode switch
+import Link from "next/link";
+import { useWorkspace } from "@/contexts/WorkspaceContext";
 
-export default function SettingsPage() { // Renamed component
+export default function Settings() {
   const [notifications, setNotifications] = useState(true);
   const [autoSave, setAutoSave] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
 
-  const { workspaces, selectedWorkspace, getAgentsForWorkspace } = useWorkspace();
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  // useEffect only runs on client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    // Render nothing or a loading indicator until mounted on client
-    // This is to avoid hydration mismatch with server-rendered theme state
-    return null;
-  }
-
-  const handleDarkModeChange = (checked: boolean) => {
-    setTheme(checked ? "dark" : "light");
-  };
+  const { workspaces, selectedWorkspace, setSelectedWorkspace: _setSelectedWorkspace, getAgentsForWorkspace } = useWorkspace();
 
   return (
-    <div className="space-y-6 p-4 md:p-8"> {/* Added padding */}
+    <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" asChild>
-          <Link href="/dashboard"> {/* Changed to href */}
+          <Link href="/dashboard">
             <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>
@@ -72,37 +55,35 @@ export default function SettingsPage() { // Renamed component
                 </p>
               </div>
               <Button asChild>
-                <Link href="/workspace"> {/* Changed to href */}
+                <Link href="/workspace">
                   <Plus className="mr-2 h-4 w-4" />
                   Gerenciar Ambientes
                 </Link>
               </Button>
             </div>
 
-            {workspaces.length > 0 && selectedWorkspace && ( // Ensure selectedWorkspace exists
+            {workspaces.length > 0 && (
               <div className="space-y-3">
                 <Separator />
                 <div>
                   <p className="text-sm font-medium mb-2">Ambiente ativo:</p>
-                  <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <Building2 className="h-4 w-4 text-primary" /> {/* Adjusted icon color */}
-                      <div>
-                        <p className="font-medium">{selectedWorkspace.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {getAgentsForWorkspace(selectedWorkspace.id).length} agente(s)
-                        </p>
+                  {selectedWorkspace ? (
+                    <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <Building2 className="h-4 w-4 text-blue-500" />
+                        <div>
+                          <p className="font-medium">{selectedWorkspace.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {getAgentsForWorkspace(selectedWorkspace.id).length} agente(s)
+                          </p>
+                        </div>
                       </div>
+                      <Badge>Ativo</Badge>
                     </div>
-                    <Badge>Ativo</Badge>
-                  </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Nenhum ambiente selecionado</p>
+                  )}
                 </div>
-              </div>
-            )}
-             {workspaces.length > 0 && !selectedWorkspace && (
-              <div className="space-y-3">
-                <Separator />
-                <p className="text-sm text-muted-foreground p-3 bg-muted rounded-lg">Nenhum ambiente ativo selecionado. <Link href="/workspace" className="underline">Selecione um ambiente</Link>.</p>
               </div>
             )}
           </CardContent>
@@ -161,8 +142,8 @@ export default function SettingsPage() { // Renamed component
               </div>
               <Switch
                 id="dark-mode"
-                checked={theme === "dark"}
-                onCheckedChange={handleDarkModeChange}
+                checked={darkMode}
+                onCheckedChange={setDarkMode}
               />
             </div>
           </CardContent>
@@ -185,7 +166,7 @@ export default function SettingsPage() { // Renamed component
                 Para alterar seu perfil jurídico, refaça o processo de configuração inicial.
               </p>
               <Button variant="outline" size="sm" asChild>
-                <Link href="/onboarding/legal-profile"> {/* Changed to href */}
+                <Link href="/onboarding/legal-profile">
                   Atualizar Perfil
                 </Link>
               </Button>
@@ -216,3 +197,4 @@ export default function SettingsPage() { // Renamed component
     </div>
   );
 }
+
