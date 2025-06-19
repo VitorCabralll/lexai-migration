@@ -63,8 +63,9 @@ export function Step2Selection({
                         <div className="font-medium">{agent.name}</div>
                         <div className="text-sm text-gray-500">{agent.theme}</div>
                       </div>
-                    </SelectItem>
-                  ))}
+                    </div>
+                  </SelectItem>
+                ))}
                 </>
             )}
           </SelectContent>
