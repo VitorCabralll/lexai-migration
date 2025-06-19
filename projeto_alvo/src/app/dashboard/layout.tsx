@@ -1,3 +1,5 @@
+"use client";
+
 import { AuthLayout } from '@/components/layout/auth-layout';
 import type { ReactNode } from 'react';
 import { WorkspaceProvider } from '@/contexts/WorkspaceContext';

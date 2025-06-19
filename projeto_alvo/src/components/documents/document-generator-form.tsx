@@ -24,6 +24,7 @@ import { DOCUMENT_TYPES } from "@/lib/constants";
 import type { DocumentType } from "@/types";
 import { Loader2, Sparkles } from "lucide-react";
 import React from "react";
+import { DocumentUploader } from "./document-uploader";
 
 const generateDocumentSchema = z.object({
   documentType: z.enum(DOCUMENT_TYPES as [DocumentType, ...DocumentType[]], {
@@ -73,6 +74,9 @@ export function DocumentGeneratorForm({ onSubmit, isGenerating }: DocumentGenera
               <FormMessage />
             </FormItem>
           )}
+        />
+        <DocumentUploader
+          onTextExtracted={(text) => form.setValue("details", text)}
         />
         <FormField
           control={form.control}
